@@ -1,0 +1,434 @@
+/* ーーー 共通デザイン ーーー */
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f4f7f6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0 20px 20px 20px;
+    box-sizing: border-box;
+}
+
+.global-header {
+    width: 100%;
+    background: #ffffff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    max-width: 630px;
+}
+
+.nav-item {
+    flex: 1;
+    text-align: center;
+}
+
+.nav-link {
+    display: block;
+    padding: 15px 10px;
+    text-decoration: none;
+    color: #666;
+    font-weight: bold;
+    font-size: 15px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.nav-link:hover {
+    background: #f9f9f9;
+    color: #333;
+}
+
+.nav-link.active {
+    background: #eef2f5;
+    color: #2c3e50;
+    border-bottom: 3px solid #3498db;
+    padding-bottom: 12px;
+}
+
+.container {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    text-align: center;
+    width: 100%;
+    max-width: 630px;
+    box-sizing: border-box;
+}
+
+h2 {
+    color: #333;
+    margin-bottom: 25px;
+    font-size: 24px;
+}
+
+.settings-group {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #eee;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+    flex: 1;
+    min-width: 0;
+}
+
+label {
+    font-size: 12px;
+    color: #666;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+input[type="number"] {
+    padding: 8px 4px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    text-align: center;
+    box-sizing: border-box;
+    height: 34px;
+    width: 100%;
+    max-width: 120px;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.warning-text {
+    font-size: 11px;
+    color: #e74c3c;
+    text-align: right;
+    font-weight: bold;
+}
+
+.warning-text:not(:empty) {
+    margin-bottom: 15px;
+}
+
+.btn-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.2s, transform 0.1s;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+button.generate-btn {
+    flex: 1.2;
+    background-color: #3498db;
+    color: white;
+    font-size: 14px;
+    padding: 12px 5px;
+    min-width: 120px;
+}
+
+button.generate-btn:hover {
+    background-color: #2980b9;
+}
+
+button.copy-all-btn {
+    flex: 1;
+    background-color: #9b59b6;
+    color: white;
+    font-size: 14px;
+    padding: 12px 5px;
+    min-width: 90px;
+}
+
+button.copy-all-btn:hover {
+    background-color: #8e44ad;
+}
+
+button.download-btn {
+    flex: 1;
+    background-color: #e67e22;
+    color: white;
+    font-size: 14px;
+    padding: 12px 5px;
+    min-width: 90px;
+}
+
+button.download-btn:hover {
+    background-color: #d35400;
+}
+
+button.reset-btn {
+    flex: 0.8;
+    background-color: #7f8c8d;
+    color: white;
+    font-size: 14px;
+    padding: 12px 5px;
+    min-width: 70px;
+}
+
+button.reset-btn:hover {
+    background-color: #95a5a6;
+}
+
+.result-area {
+    height: 220px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background: #fafafa;
+    padding: 10px;
+}
+
+.result-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 8px;
+    align-items: center;
+}
+
+.result-row:last-child {
+    margin-bottom: 0;
+}
+
+.result-container {
+    flex: 1;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #2c3e50;
+    word-break: break-all;
+    text-align: left;
+    padding-left: 15px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+button.copy-btn {
+    background-color: #2ecc71;
+    color: white;
+    width: 80px;
+    flex-shrink: 0;
+}
+
+button.copy-btn:hover {
+    background-color: #27ae60;
+}
+
+.msg {
+    font-size: 12px;
+    color: #27ae60;
+    height: 15px;
+    margin-top: 10px;
+}
+
+/* ーーー 広告スペース ーーー */
+.ad-space-container {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px dashed #ddd;
+}
+
+.ad-space-bottom {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.ad-label {
+    font-size: 10px;
+    color: #aaa;
+    margin-bottom: 5px;
+    display: block;
+    font-weight: normal;
+}
+
+.ad-box {
+    background: #eee;
+    color: #888;
+    font-size: 12px;
+    padding: 15px;
+    border-radius: 6px;
+    display: inline-block;
+    min-width: 300px;
+    min-height: 50px;
+    box-sizing: border-box;
+}
+
+/* ーーー パスワード画面特有のデザイン ーーー */
+.checkbox-card-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 15px;
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    font-size: 13px;
+    color: #333;
+    cursor: pointer;
+    font-weight: bold;
+    background: #fff;
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    user-select: none;
+    box-sizing: border-box;
+    white-space: nowrap;
+}
+
+.checkbox-label input[type="checkbox"] {
+    margin: 0;
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+}
+
+.details-wrapper {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.details-summary {
+    font-size: 13px;
+    color: #3498db;
+    cursor: pointer;
+    font-weight: bold;
+    user-select: none;
+    outline: none;
+    padding: 5px 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.details-summary:hover {
+    color: #2980b9;
+}
+
+.symbol-selection-grid {
+    margin-top: 10px;
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 12px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+}
+
+.symbol-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-size: 14px;
+    font-family: 'Courier New', Courier, monospace;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 6px 0;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.symbol-label input {
+    margin: 0;
+    cursor: pointer;
+}
+
+/* ーーー スマホ対応（レスポンシブ） ーーー */
+@media screen and (max-width: 600px) {
+    body {
+        padding: 0 10px 10px 10px;
+    }
+    .global-header {
+        margin-bottom: 20px;
+    }
+    .nav-link {
+        padding: 12px 5px;
+        font-size: 13px;
+    }
+    .nav-link.active {
+        padding-bottom: 9px;
+    }
+    .container {
+        padding: 20px 15px;
+    }
+    h2 {
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+    .checkbox-card-group {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        padding: 10px;
+    }
+    .checkbox-label {
+        font-size: 14px;
+        padding: 10px 12px;
+    }
+    .symbol-selection-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+        padding: 8px;
+    }
+    .btn-group {
+        gap: 8px;
+    }
+    button.generate-btn, button.copy-all-btn, button.download-btn, button.reset-btn {
+        flex: none;
+        width: calc(50% - 4px);
+        box-sizing: border-box;
+        padding: 12px 2px;
+        font-size: 13px;
+    }
+    .warning-text {
+        text-align: center;
+    }
+}
