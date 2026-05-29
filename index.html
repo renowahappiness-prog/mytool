@@ -3,15 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="ブラウザで簡単に使える無料の乱数ジェネレーターです。最小値・最大値の指定や作成個数の変更、CSV保存、一括コピー機能など、シンプルで使いやすいです。">
-    <meta property="og:site_name" content="便利ツールコレクション">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://renowahappiness-prog.github.io/mytool/index.html">
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="乱数・パスワードジェネレーターツール">
-    <title>乱数ジェネレーター - 乱数作成・CSV保存・一括コピー</title>
+    <title>乱数ジェネレーター</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="canonical" href="https://renowahappiness-prog.github.io/mytool/index.html">
 </head>
 <body>
 
@@ -22,23 +15,36 @@
     
     <div class="settings-group">
         <div class="input-group">
-            <label for="min-num">最小値</label>
-            <input type="number" id="min-num" value="1" onchange="saveSettings()">
-        </div>
-        <div class="input-group">
-            <label for="max-num">最大値</label>
-            <input type="number" id="max-num" value="100" onchange="saveSettings()">
+            <label for="digits">乱数桁数</label>
+            <input type="number" id="digits" value="9" min="1" max="100" onchange="saveSettings()">
         </div>
         <div class="input-group">
             <label for="count">作成個数</label>
-            <input type="number" id="count" value="10" min="1" max="10000" oninput="checkCount()" onchange="saveSettings()">
+            <input type="number" id="count" value="10" min="1" max="100" oninput="checkCount()" onchange="saveSettings()">
+        </div>
+        <div class="input-group">
+            <label>数字の重複</label>
+            <div class="radio-group">
+                <label class="radio-label"><input type="radio" name="duplicate" value="false" checked onchange="saveSettings()">なし</label>
+                <label class="radio-label"><input type="radio" name="duplicate" value="true" onchange="saveSettings()">あり</label>
+            </div>
+        </div>
+        <div class="input-group">
+            <label for="prefix">前テキスト</label>
+            <input type="text" id="prefix" value="" placeholder="任意" onchange="saveSettings()">
+            <span class="example-text">（例: 前テキスト-123 ）</span>
+        </div>
+        <div class="input-group">
+            <label for="suffix">後テキスト</label>
+            <input type="text" id="suffix" value="" placeholder="任意" onchange="saveSettings()">
+            <span class="example-text">（例: 123-後テキスト ）</span>
         </div>
     </div>
 
     <div class="warning-text" id="warning-text"></div>
 
     <div class="btn-group">
-        <button class="generate-btn" onclick="generateRandomNumbers()">乱数を作成</button>
+        <button class="generate-btn" onclick="generateRandoms()">乱数を作成</button>
         <button class="copy-all-btn" onclick="copyAllText()">一括コピー</button>
         <button class="download-btn" onclick="downloadCSV()">CSV保存</button>
         <button class="reset-btn" onclick="resetSettings()">リセット</button>
@@ -48,14 +54,24 @@
     </div>
     
     <div class="msg" id="copy-msg"></div>
-</div> <div class="ad-space-bottom">
+
+    <div class="ad-space-container">
+        <span class="ad-label">スポンサーリンク</span>
+        <div class="ad-box">
+            ここに広告が表示されます
+        </div>
+    </div>
+</div>
+
+<div class="ad-space-bottom">
     <span class="ad-label">スポンサーリンク</span>
     <div class="ad-box">
-    <script src="https://adm.shinobi.jp/s/d149ee751a7bfab9ce516b030c1e447d"></script>
+        ここに広告が表示されます
     </div>
 </div>
 
 <script>
+    // index.htmlのヘッダー読み込み処理を維持
     function loadHeader() {
         fetch('header.html')
             .then(response => {
@@ -72,36 +88,47 @@
 
     let currentRandomNumbers = [];
 
+    // 「乱数.html」のロジックをベースにしたLocalStorage保存・読込・リセット
     function saveSettings() {
         const settings = {
-            min: document.getElementById('min-num').value,
-            max: document.getElementById('max-num').value,
+            prefix: document.getElementById('prefix').value,
+            digits: document.getElementById('digits').value,
+            suffix: document.getElementById('suffix').value,
+            duplicate: document.querySelector('input[name="duplicate"]:checked').value,
             count: document.getElementById('count').value
         };
-        localStorage.setItem('randomGeneratorSettingsSimple', JSON.stringify(settings));
+        localStorage.setItem('generatorSettings', JSON.stringify(settings));
     }
 
     function loadSettings() {
-        const savedData = localStorage.getItem('randomGeneratorSettingsSimple');
+        const savedData = localStorage.getItem('generatorSettings');
         if (!savedData) return;
 
         try {
             const settings = JSON.parse(savedData);
-            if (settings.min !== undefined) document.getElementById('min-num').value = settings.min;
-            if (settings.max !== undefined) document.getElementById('max-num').value = settings.max;
+            if (settings.prefix !== undefined) document.getElementById('prefix').value = settings.prefix;
+            if (settings.digits !== undefined) document.getElementById('digits').value = settings.digits;
+            if (settings.suffix !== undefined) document.getElementById('suffix').value = settings.suffix;
             if (settings.count !== undefined) document.getElementById('count').value = settings.count;
+            if (settings.duplicate !== undefined) {
+                const radio = document.querySelector(`input[name="duplicate"][value="${settings.duplicate}"]`);
+                if (radio) radio.checked = true;
+            }
         } catch (e) {
             console.error('設定の読み込みに失敗しました', e);
         }
     }
 
     function resetSettings() {
-        localStorage.removeItem('randomGeneratorSettingsSimple');
-        document.getElementById('min-num').value = '1';
-        document.getElementById('max-num').value = '100';
+        localStorage.removeItem('generatorSettings');
+        document.getElementById('prefix').value = '';
+        document.getElementById('digits').value = '9';
+        document.getElementById('suffix').value = '';
         document.getElementById('count').value = '10';
+        const defaultRadio = document.querySelector('input[name="duplicate"][value="false"]');
+        if (defaultRadio) defaultRadio.checked = true;
         document.getElementById('warning-text').textContent = '';
-        generateRandomNumbers();
+        generateRandoms();
     }
 
     function checkCount() {
@@ -109,76 +136,88 @@
         const warningText = document.getElementById('warning-text');
         const count = parseInt(countInput.value) || 0;
 
-        if (count > 10000) {
-            warningText.textContent = '※エラー: 10,000個以上は一括作成できません。';
-        } else if (count > 100) {
-            warningText.textContent = '※注意: 個数が多いため、作成やコピーに時間がかかる場合があります。';
+        if (count > 100) {
+            warningText.textContent = '※エラー: 100個以上は作成できません。';
         } else {
             warningText.textContent = '';
         }
     }
 
-    function generateRandomNumbers() {
-        const minInput = document.getElementById('min-num');
-        const maxInput = document.getElementById('max-num');
+    // 「乱数.html」のメイン機能（桁数指定・重複検知・前後テキスト付与）
+    function generateRandoms() {
+        const prefixInput = document.getElementById('prefix');
+        const suffixInput = document.getElementById('suffix');
+        const digitsInput = document.getElementById('digits');
         const countInput = document.getElementById('count');
         const warningText = document.getElementById('warning-text');
+        const allowDuplicate = document.querySelector('input[name="duplicate"]:checked').value === 'true';
         
-        let min = parseInt(minInput.value);
-        let max = parseInt(maxInput.value);
+        let prefix = prefixInput.value;
+        let suffix = suffixInput.value;
+        let digits = parseInt(digitsInput.value) || 9;
         let count = parseInt(countInput.value) || 10;
 
-        if (isNaN(min) || isNaN(max)) {
-            warningText.textContent = '※エラー: 最小値と最大値には数値を入力してください。';
+        if (count > 100) {
+            warningText.textContent = '※エラー: 100個以上は作成できません。';
             return;
         }
 
-        if (min > max) {
-            const temp = min;
-            min = max;
-            max = temp;
-            minInput.value = min;
-            maxInput.value = max;
-        }
-
-        if (count > 10000) {
-            warningText.textContent = '※エラー: 10,000個以上は一括作成できません。';
-            return;
-        }
+        if (digits < 1) digits = 1;
+        if (digits > 100) digits = 100;
         if (count < 1) count = 1;
 
-        if (count > 100) {
-            warningText.textContent = '※注意: 個数が多いため、作成やコピーに時間がかかる場合があります。';
-        } else {
-            warningText.textContent = '';
+        if (!allowDuplicate) {
+            const maxCombinations = Math.min(Math.pow(10, digits), 100); 
+            if (count > maxCombinations) {
+                warningText.textContent = `※エラー: 重複なしの場合、${digits}桁では最大 ${maxCombinations}個までしか生成できません。`;
+                return;
+            }
         }
+
+        warningText.textContent = '';
 
         const resultArea = document.getElementById('result-area');
         resultArea.innerHTML = ''; 
         document.getElementById('copy-msg').textContent = '';
         
         const generatedList = [];
-        const range = max - min + 1;
+        const uniqueNumbersSet = new Set();
+        let safetyCounter = 0;
 
-        for (let i = 0; i < count; i++) {
-            const num = Math.floor(Math.random() * range) + min;
-            generatedList.push(num);
+        while (generatedList.length < count && safetyCounter < 100000) {
+            safetyCounter++;
+
+            let randomNumber = '';
+            for (let d = 0; d < digits; d++) {
+                randomNumber += Math.floor(Math.random() * 10);
+            }
+
+            const finalString = prefix + randomNumber + suffix;
+
+            if (allowDuplicate) {
+                generatedList.push(finalString);
+            } else {
+                if (!uniqueNumbersSet.has(finalString)) {
+                    uniqueNumbersSet.add(finalString);
+                    generatedList.push(finalString);
+                }
+            }
         }
 
         currentRandomNumbers = generatedList;
 
-        currentRandomNumbers.forEach((num) => {
+        currentRandomNumbers.forEach((finalString) => {
             const row = document.createElement('div');
             row.className = 'result-row';
 
             const container = document.createElement('div');
             container.className = 'result-container';
-            container.textContent = num;
+            container.textContent = finalString;
 
             const btn = document.createElement('button');
             btn.className = 'copy-btn';
             btn.textContent = 'コピー';
-            btn.onclick = function() { copyText(num); };
+            btn.onclick = function() { copyText(finalString); };
 
             row.appendChild(container);
             row.appendChild(btn);
@@ -186,6 +225,7 @@
         });
     }
 
+    // 共通のコピー・CSVダウンロード処理
     function copyText(text) {
         navigator.clipboard.writeText(text).then(() => {
             const msg = document.getElementById('copy-msg');
@@ -201,9 +241,7 @@
             alert('コピーするデータがありません。');
             return;
         }
-        
         const allText = currentRandomNumbers.join('\n');
-        
         navigator.clipboard.writeText(allText).then(() => {
             const msg = document.getElementById('copy-msg');
             msg.textContent = 'すべての乱数を一括コピーしました！';
@@ -243,10 +281,11 @@
         document.body.removeChild(link);
     }
 
+    // 初期化（ヘッダー読込を追加）
     window.addEventListener('DOMContentLoaded', () => {
         loadHeader();
         loadSettings();
-        generateRandomNumbers();
+        generateRandoms();
     });
 </script>
 
