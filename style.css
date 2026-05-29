@@ -73,16 +73,18 @@ h2 {
     font-size: 24px;
 }
 
+/* 乱数ジェネレーター用に最適化した設定グループ設定（PC時は絶対に折り返さない） */
 .settings-group {
     display: flex;
-    justify-content: center;
-    margin-bottom: 15px;
+    justify-content: space-between;
+    margin-bottom: 20px;
     background: #f9f9f9;
     padding: 15px;
     border-radius: 8px;
     border: 1px solid #eee;
-    gap: 20px;
+    gap: 10px;
     align-items: flex-start;
+    flex-wrap: nowrap; /* PC表示時は横並び一列を死守 */
 }
 
 .input-group {
@@ -91,6 +93,7 @@ h2 {
     align-items: center;
     gap: 6px;
     position: relative;
+    padding-bottom: 18px; /* 例テキスト(example-text)の絶対配置用スペース */
     flex: 1;
     min-width: 0;
 }
@@ -102,7 +105,8 @@ label {
     white-space: nowrap;
 }
 
-input[type="number"] {
+/* フォーム入力ボックス（numberとtextの両方に対応） */
+.input-group input {
     padding: 8px 4px;
     border: 1px solid #ccc;
     border-radius: 6px;
@@ -110,14 +114,52 @@ input[type="number"] {
     text-align: center;
     box-sizing: border-box;
     height: 34px;
-    width: 100%;
-    max-width: 120px;
+    width: 100%; /* 親要素の幅いっぱいに広げる */
 }
 
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
     opacity: 1 !important;
     visibility: visible !important;
+}
+
+/* 数字の重複（ラジオボタン）用の固有スタイル */
+.radio-group {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    justify-content: center;
+    align-items: center;
+    height: 34px;
+    box-sizing: border-box;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 13px;
+    color: #333;
+    cursor: pointer;
+    font-weight: normal;
+    white-space: nowrap;
+}
+
+.radio-label input[type="radio"] {
+    margin: 0;
+    cursor: pointer;
+    width: auto;
+}
+
+/* 前後テキストの補足説明プレースホルダー */
+.example-text {
+    font-size: 10px;
+    color: #999;
+    white-space: nowrap;
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .warning-text {
@@ -292,7 +334,7 @@ button.copy-btn:hover {
     box-sizing: border-box;
 }
 
-/* ーーー パスワード画面特有のデザイン ーーー */
+/* ーーー パスワード画面特有のデザイン（別画面の互換性維持用） ーーー */
 .checkbox-card-group {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -404,6 +446,24 @@ button.copy-btn:hover {
         font-size: 20px;
         margin-bottom: 15px;
     }
+    
+    /* 乱数ジェネレーターの入力グループをスマホ表示で綺麗に折り返す設定 */
+    .settings-group {
+        gap: 0 10px;
+        padding: 12px;
+        flex-wrap: wrap; /* スマホのみ折り返しを許可 */
+    }
+    /* 上段3つ（桁数・個数・重複）を3等分で横並びに固定 */
+    .settings-group .input-group {
+        flex: none;
+        width: calc(33.333% - 7px); 
+    }
+    /* 下段2つ（前テキスト・後テキスト）を50%ずつの綺麗に2分割配置 */
+    .settings-group .input-group:nth-last-child(1),
+    .settings-group .input-group:nth-last-child(2) {
+        width: calc(50% - 5px);
+    }
+
     .checkbox-card-group {
         grid-template-columns: 1fr;
         gap: 8px;
