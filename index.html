@@ -4,355 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>乱数ジェネレーター</title>
-    <style>
-        body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background-color: #f4f7f6;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 0 20px 20px 20px;
-            box-sizing: border-box;
-        }
-
-        /* ーーー 共通ヘッダーメニューのスタイル ーーー */
-        .global-header {
-            width: 100%;
-            background: #ffffff;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: center;
-        }
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            width: 100%;
-            max-width: 630px;
-        }
-        .nav-item {
-            flex: 1;
-            text-align: center;
-        }
-        .nav-link {
-            display: block;
-            padding: 15px 10px;
-            text-decoration: none;
-            color: #666;
-            font-weight: bold;
-            font-size: 15px;
-            transition: background 0.2s, color 0.2s;
-        }
-        .nav-link:hover {
-            background: #f9f9f9;
-            color: #333;
-        }
-        .nav-link.active {
-            background: #eef2f5;
-            color: #2c3e50;
-            border-bottom: 3px solid #3498db;
-            padding-bottom: 12px; /* ボーダー分下部パディングを調整 */
-        }
-
-        /* ーーー メインコンテンツのスタイル ーーー */
-        .container {
-            background: #ffffff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            text-align: center;
-            width: 100%;
-            max-width: 630px;
-            box-sizing: border-box;
-        }
-        h2 {
-            color: #333;
-            margin-bottom: 25px;
-            font-size: 24px;
-        }
-        .settings-group {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #eee;
-            gap: 10px;
-            align-items: flex-start;
-            flex-wrap: nowrap;
-        }
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            position: relative;
-            padding-bottom: 18px;
-            flex: 1;
-            min-width: 0;
-        }
-        .radio-group {
-            display: flex;
-            flex-direction: row;
-            gap: 6px;
-            justify-content: center;
-            align-items: center;
-            height: 34px;
-            box-sizing: border-box;
-        }
-        .radio-label {
-            display: flex;
-            align-items: center;
-            gap: 2px;
-            font-size: 13px;
-            color: #333;
-            cursor: pointer;
-            font-weight: normal;
-            white-space: nowrap;
-        }
-        .radio-label input[type="radio"] {
-            margin: 0;
-            cursor: pointer;
-            width: auto;
-        }
-        label {
-            font-size: 12px;
-            color: #666;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-        input {
-            padding: 8px 4px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 14px;
-            text-align: center;
-            box-sizing: border-box;
-            height: 34px;
-            width: 100%;
-        }
-        
-        .example-text {
-            font-size: 10px;
-            color: #999;
-            white-space: nowrap;
-            position: absolute;
-            bottom: 0px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-        
-        input[type="number"]::-webkit-inner-spin-button,
-        input[type="number"]::-webkit-outer-spin-button {
-            opacity: 1 !important;
-            visibility: visible !important;
-        }
-
-        .warning-text {
-            font-size: 11px;
-            color: #e74c3c;
-            text-align: right;
-            font-weight: bold;
-        }
-        .warning-text:not(:empty) {
-            margin-bottom: 15px;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        .result-area {
-            height: 220px;
-            overflow-y: auto;
-            margin-bottom: 20px;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            background: #fafafa;
-            padding: 10px;
-        }
-        .result-row {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 8px;
-            align-items: center;
-        }
-        .result-row:last-child {
-            margin-bottom: 0;
-        }
-        .result-container {
-            flex: 1;
-            background: #ffffff;
-            border: 1px solid #e0e0e0;
-            padding: 10px;
-            border-radius: 6px;
-            font-size: 18px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            color: #2c3e50;
-            word-break: break-all;
-            text-align: left;
-            padding-left: 15px;
-            font-family: 'Courier New', Courier, monospace;
-        }
-        button {
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
-            font-size: 14px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.2s, transform 0.1s;
-        }
-        button:active {
-            transform: scale(0.98);
-        }
-        button.copy-btn {
-            background-color: #2ecc71;
-            color: white;
-            width: 80px;
-            flex-shrink: 0;
-        }
-        button.copy-btn:hover {
-            background-color: #27ae60;
-        }
-        button.generate-btn {
-            flex: 1.2;
-            background-color: #3498db;
-            color: white;
-            font-size: 14px;
-            padding: 12px 5px;
-            min-width: 120px;
-        }
-        button.generate-btn:hover {
-            background-color: #2980b9;
-        }
-        button.copy-all-btn {
-            flex: 1;
-            background-color: #9b59b6;
-            color: white;
-            font-size: 14px;
-            padding: 12px 5px;
-            min-width: 90px;
-        }
-        button.copy-all-btn:hover {
-            background-color: #8e44ad;
-        }
-        button.download-btn {
-            flex: 1;
-            background-color: #e67e22;
-            color: white;
-            font-size: 14px;
-            padding: 12px 5px;
-            min-width: 90px;
-        }
-        button.download-btn:hover {
-            background-color: #d35400;
-        }
-        button.reset-btn {
-            flex: 0.8;
-            background-color: #7f8c8d;
-            color: white;
-            font-size: 14px;
-            padding: 12px 5px;
-            min-width: 70px;
-        }
-        button.reset-btn:hover {
-            background-color: #95a5a6;
-        }
-        .msg {
-            font-size: 12px;
-            color: #27ae60;
-            height: 15px;
-            margin-top: 10px;
-        }
-
-        /* ーーー 広告スペースのスタイル ーーー */
-        .ad-space-container {
-            margin-top: 25px;
-            padding-top: 20px;
-            border-top: 1px dashed #ddd;
-        }
-        .ad-space-bottom {
-            margin-top: 30px;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-        .ad-label {
-            font-size: 10px;
-            color: #aaa;
-            margin-bottom: 5px;
-            display: block;
-            font-weight: normal;
-        }
-        .ad-box {
-            background: #eee;
-            color: #888;
-            font-size: 12px;
-            padding: 15px;
-            border-radius: 6px;
-            display: inline-block;
-            min-width: 300px;
-            min-height: 50px;
-            box-sizing: border-box;
-        }
-
-        @media screen and (max-width: 600px) {
-            body {
-                padding: 0 10px 10px 10px;
-            }
-            .global-header {
-                margin-bottom: 20px;
-            }
-            .nav-link {
-                padding: 12px 5px;
-                font-size: 13px;
-            }
-            .nav-link.active {
-                padding-bottom: 9px;
-            }
-            .container {
-                padding: 20px 15px;
-            }
-            h2 {
-                font-size: 20px;
-                margin-bottom: 15px;
-            }
-            .settings-group {
-                gap: 0 10px;
-                padding: 12px;
-                flex-wrap: wrap;
-            }
-            .input-group {
-                flex: none;
-                width: calc(33.333% - 7px); 
-            }
-            .input-group:nth-last-child(1),
-            .input-group:nth-last-child(2) {
-                width: calc(50% - 5px);
-            }
-            .btn-group {
-                gap: 8px;
-            }
-            button.generate-btn, button.copy-all-btn, button.download-btn, button.reset-btn {
-                flex: none;
-                width: calc(50% - 4px);
-                box-sizing: border-box;
-                padding: 12px 2px;
-                font-size: 13px;
-            }
-            .warning-text {
-                text-align: center;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -363,36 +15,23 @@
     
     <div class="settings-group">
         <div class="input-group">
-            <label for="digits">乱数桁数</label>
-            <input type="number" id="digits" value="9" min="1" max="100" onchange="saveSettings()">
+            <label for="min-num">最小値</label>
+            <input type="number" id="min-num" value="1" onchange="saveSettings()">
+        </div>
+        <div class="input-group">
+            <label for="max-num">最大値</label>
+            <input type="number" id="max-num" value="100" onchange="saveSettings()">
         </div>
         <div class="input-group">
             <label for="count">作成個数</label>
-            <input type="number" id="count" value="10" min="1" max="100" oninput="checkCount()" onchange="saveSettings()">
-        </div>
-        <div class="input-group">
-            <label>数字の重複</label>
-            <div class="radio-group">
-                <label class="radio-label"><input type="radio" name="duplicate" value="false" checked onchange="saveSettings()">なし</label>
-                <label class="radio-label"><input type="radio" name="duplicate" value="true" onchange="saveSettings()">あり</label>
-            </div>
-        </div>
-        <div class="input-group">
-            <label for="prefix">前テキスト</label>
-            <input type="text" id="prefix" value="" placeholder="任意" onchange="saveSettings()">
-            <span class="example-text">（例: 前テキスト-123 ）</span>
-        </div>
-        <div class="input-group">
-            <label for="suffix">後テキスト</label>
-            <input type="text" id="suffix" value="" placeholder="任意" onchange="saveSettings()">
-            <span class="example-text">（例: 123-後テキスト ）</span>
+            <input type="number" id="count" value="10" min="1" max="10000" oninput="checkCount()" onchange="saveSettings()">
         </div>
     </div>
 
     <div class="warning-text" id="warning-text"></div>
 
     <div class="btn-group">
-        <button class="generate-btn" onclick="generateRandoms()">乱数を作成</button>
+        <button class="generate-btn" onclick="generateRandomNumbers()">乱数を作成</button>
         <button class="copy-all-btn" onclick="copyAllText()">一括コピー</button>
         <button class="download-btn" onclick="downloadCSV()">CSV保存</button>
         <button class="reset-btn" onclick="resetSettings()">リセット</button>
@@ -419,7 +58,6 @@
 </div>
 
 <script>
-    // 💡 共通ヘッダーを外部ファイルから読み込む関数
     function loadHeader() {
         fetch('header.html')
             .then(response => {
@@ -428,7 +66,6 @@
             })
             .then(data => {
                 document.getElementById('header-placeholder').innerHTML = data;
-                // このページ（乱数）のメニューに「active」クラスをつけて色を変える
                 const activeLink = document.getElementById('nav-random');
                 if (activeLink) activeLink.classList.add('active');
             })
@@ -439,50 +76,34 @@
 
     function saveSettings() {
         const settings = {
-            prefix: document.getElementById('prefix').value,
-            digits: document.getElementById('digits').value,
-            suffix: document.getElementById('suffix').value,
-            duplicate: document.querySelector('input[name="duplicate"]:checked').value,
+            min: document.getElementById('min-num').value,
+            max: document.getElementById('max-num').value,
             count: document.getElementById('count').value
         };
-        localStorage.setItem('generatorSettings', JSON.stringify(settings));
+        localStorage.setItem('randomGeneratorSettingsSimple', JSON.stringify(settings));
     }
 
     function loadSettings() {
-        const savedData = localStorage.getItem('generatorSettings');
+        const savedData = localStorage.getItem('randomGeneratorSettingsSimple');
         if (!savedData) return;
 
         try {
             const settings = JSON.parse(savedData);
-            
-            if (settings.prefix !== undefined) document.getElementById('prefix').value = settings.prefix;
-            if (settings.digits !== undefined) document.getElementById('digits').value = settings.digits;
-            if (settings.suffix !== undefined) document.getElementById('suffix').value = settings.suffix;
+            if (settings.min !== undefined) document.getElementById('min-num').value = settings.min;
+            if (settings.max !== undefined) document.getElementById('max-num').value = settings.max;
             if (settings.count !== undefined) document.getElementById('count').value = settings.count;
-            
-            if (settings.duplicate !== undefined) {
-                const radio = document.querySelector(`input[name="duplicate"][value="${settings.duplicate}"]`);
-                if (radio) radio.checked = true;
-            }
         } catch (e) {
             console.error('設定の読み込みに失敗しました', e);
         }
     }
 
     function resetSettings() {
-        localStorage.removeItem('generatorSettings');
-
-        document.getElementById('prefix').value = '';
-        document.getElementById('digits').value = '9';
-        document.getElementById('suffix').value = '';
+        localStorage.removeItem('randomGeneratorSettingsSimple');
+        document.getElementById('min-num').value = '1';
+        document.getElementById('max-num').value = '100';
         document.getElementById('count').value = '10';
-        
-        const defaultRadio = document.querySelector('input[name="duplicate"][value="false"]');
-        if (defaultRadio) defaultRadio.checked = true;
-
         document.getElementById('warning-text').textContent = '';
-
-        generateRandoms();
+        generateRandomNumbers();
     }
 
     function checkCount() {
@@ -490,87 +111,76 @@
         const warningText = document.getElementById('warning-text');
         const count = parseInt(countInput.value) || 0;
 
-        if (count > 100) {
-            warningText.textContent = '※エラー: 100個以上は作成できません。';
+        if (count > 10000) {
+            warningText.textContent = '※エラー: 10,000個以上は一括作成できません。';
+        } else if (count > 100) {
+            warningText.textContent = '※注意: 個数が多いため、作成やコピーに時間がかかる場合があります。';
         } else {
             warningText.textContent = '';
         }
     }
 
-    function generateRandoms() {
-        const prefixInput = document.getElementById('prefix');
-        const suffixInput = document.getElementById('suffix');
-        const digitsInput = document.getElementById('digits');
+    function generateRandomNumbers() {
+        const minInput = document.getElementById('min-num');
+        const maxInput = document.getElementById('max-num');
         const countInput = document.getElementById('count');
         const warningText = document.getElementById('warning-text');
-        const allowDuplicate = document.querySelector('input[name="duplicate"]:checked').value === 'true';
         
-        let prefix = prefixInput.value;
-        let suffix = suffixInput.value;
-        let digits = parseInt(digitsInput.value) || 9;
+        let min = parseInt(minInput.value);
+        let max = parseInt(maxInput.value);
         let count = parseInt(countInput.value) || 10;
 
-        if (count > 100) {
-            warningText.textContent = '※エラー: 100個以上は作成できません。';
+        if (isNaN(min) || isNaN(max)) {
+            warningText.textContent = '※エラー: 最小値と最大値には数値を入力してください。';
             return;
         }
 
-        if (digits < 1) digits = 1;
-        if (digits > 100) digits = 100;
-        if (count < 1) count = 1;
-
-        if (!allowDuplicate) {
-            const maxCombinations = Math.min(Math.pow(10, digits), 100); 
-            if (count > maxCombinations) {
-                warningText.textContent = `※エラー: 重複なしの場合、${digits}桁では最大 ${maxCombinations}個までしか生成できません。`;
-                return;
-            }
+        if (min > max) {
+            const temp = min;
+            min = max;
+            max = temp;
+            minInput.value = min;
+            maxInput.value = max;
         }
 
-        warningText.textContent = '';
+        if (count > 10000) {
+            warningText.textContent = '※エラー: 10,000個以上は一括作成できません。';
+            return;
+        }
+        if (count < 1) count = 1;
+
+        if (count > 100) {
+            warningText.textContent = '※注意: 個数が多いため、作成やコピーに時間がかかる場合があります。';
+        } else {
+            warningText.textContent = '';
+        }
 
         const resultArea = document.getElementById('result-area');
         resultArea.innerHTML = ''; 
         document.getElementById('copy-msg').textContent = '';
         
         const generatedList = [];
-        const uniqueNumbersSet = new Set();
-        let safetyCounter = 0;
+        const range = max - min + 1;
 
-        while (generatedList.length < count && safetyCounter < 100000) {
-            safetyCounter++;
-
-            let randomNumber = '';
-            for (let d = 0; d < digits; d++) {
-                randomNumber += Math.floor(Math.random() * 10);
-            }
-
-            const finalString = prefix + randomNumber + suffix;
-
-            if (allowDuplicate) {
-                generatedList.push(finalString);
-            } else {
-                if (!uniqueNumbersSet.has(finalString)) {
-                    uniqueNumbersSet.add(finalString);
-                    generatedList.push(finalString);
-                }
-            }
+        for (let i = 0; i < count; i++) {
+            const num = Math.floor(Math.random() * range) + min;
+            generatedList.push(num);
         }
 
         currentRandomNumbers = generatedList;
 
-        currentRandomNumbers.forEach((finalString) => {
+        currentRandomNumbers.forEach((num) => {
             const row = document.createElement('div');
             row.className = 'result-row';
 
             const container = document.createElement('div');
             container.className = 'result-container';
-            container.textContent = finalString;
+            container.textContent = num;
 
             const btn = document.createElement('button');
             btn.className = 'copy-btn';
             btn.textContent = 'コピー';
-            btn.onclick = function() { copyText(finalString); };
+            btn.onclick = function() { copyText(num); };
 
             row.appendChild(container);
             row.appendChild(btn);
@@ -636,9 +246,9 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-        loadHeader(); // 💡 ヘッダーの読み込みを実行
+        loadHeader();
         loadSettings();
-        generateRandoms();
+        generateRandomNumbers();
     });
 </script>
 
